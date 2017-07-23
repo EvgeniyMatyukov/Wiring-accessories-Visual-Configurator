@@ -1,0 +1,220 @@
+<style type="text/css">
+.block1 { 
+visibility:hidden;
+width: 600px;
+background: #cd0; 
+padding: 5px; 
+border: solid 2px black; 
+float: left; 
+position: absolute; 
+top: 40px; 
+left: -70px; 
+z-index: 10;
+}
+
+.block2 { 
+visibility:hidden;
+width: 200px;
+background: #fc0; 
+padding: 5px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+z-index: 99;
+}
+
+.block3 { 
+visibility:hidden;
+background: #ccc; 
+padding: 6px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+}
+
+img.x {
+background: #ccc; 
+padding: 4px; 
+border: solid 0px black; 
+}
+
+
+.block4 { 
+
+background: #0c0; 
+padding: 3px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+}
+
+</style>
+
+<div class="block3" id="mess"></div> 
+<div class="block2" id="mess2"></div> 
+<div class="block4" id="mess3"></div> 
+
+
+<script type="text/javascript">
+
+var op=0;
+var opx=0;
+var mousex=0;
+var mousey=0;
+var x0=0;
+var y0=0;
+
+document.onmousemove = function(event) {
+ var event = event || window.event;
+ mousex=defPosition(event).x;
+ mousey=defPosition(event).y;
+// imouse();
+}
+
+
+function defPosition(event) {
+ var x = y = 0;
+ if (document.attachEvent != null) { // Internet Explorer & Opera
+ x = window.event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+ y = window.event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+ } else if (!document.attachEvent && document.addEventListener) { // Gecko
+ x = event.clientX + window.scrollX;
+ y = event.clientY + window.scrollY;
+ } else {
+ // Do nothing
+ }
+ return {x:x, y:y};
+}
+
+function tooltip(thumb,par,dx,dy) {
+ hidetxt();
+ this.thumb = thumb;
+ var br=this.thumb.getBoundingClientRect();
+ x0=br.left+document.body.scrollLeft-dx;
+ y0=br.top+document.body.scrollTop-dy;
+
+ tipobj=document.getElementById('mess');
+ tipobj.innerHTML = "<img src='"+par+"' onmouseout='hide_info();' onload='tooltipon();' alt='' border='0'>"; //txt;
+
+}
+
+function tooltipon() {
+
+ if (!op) {
+ op = 0.05; 
+ tipobj.style.opacity = op; 
+ tipobj.style.left=x0+"px";
+ tipobj.style.top=y0+"px";
+ tipobj.style.visibility="visible";
+ 
+ appear();
+ }
+ else {
+ tipobj.style.left=x0+"px";
+ tipobj.style.top=y0+"px";
+ tipobj.style.visibility="visible";
+ } 
+
+}
+
+
+function tooltiptxt(thumb,txt) {
+ this.thumb = thumb;
+ var br=this.thumb.getBoundingClientRect();
+ x0=br.left+document.body.scrollLeft;
+ y0=br.top+document.body.scrollTop;
+
+ wx0 = thumb.offsetWidth;
+ wy0 = thumb.offsetHeight;
+ 
+ tipobjplus=document.getElementById('mess3');
+ tipobjplus.innerHTML = "<img src='http://sabielektro.ru/visual/addobjd.gif'>"; //txt;
+
+
+ 
+ tipobjtxt=document.getElementById('mess2');
+ tipobjtxt.innerHTML = txt;
+
+
+
+
+ if (opx==0) {
+ opx = 0.05; 
+ tipobjtxt.style.opacity = opx; 
+ tipobjtxt.style.left=(mousex+20)+"px";
+ tipobjtxt.style.top=(mousey+20)+"px";
+ tipobjtxt.style.visibility="visible";
+ 
+ tipobjplus.style.opacity = opx; 
+ tipobjplus.style.left=(x0+wx0-24)+"px";
+ tipobjplus.style.top=y0+"px";
+ tipobjplus.style.visibility="visible";
+
+ 
+ 
+ appeartxt();
+ }
+ else {
+ tipobjtxt.style.left=(mousex+10)+"px";
+ tipobjtxt.style.top=(mousey+10)+"px";
+ tipobjtxt.style.visibility="visible";
+
+
+ tipobjplus.style.left=(x0+wx0-24)+"px";
+ tipobjplus.style.top=y0+"px";
+ tipobjplus.style.visibility="visible";
+ } 
+}
+
+function appeartxt() { 
+ if(opx < 0.95) {
+ opx += 0.05;
+ tipobjtxt.style.opacity = opx;
+ tipobjtxt.style.filter = 'alpha(opacity='+opx*100+')';
+
+ tipobjplus.style.opacity = opx;
+ tipobjplus.style.filter = 'alpha(opacity='+opx*100+')';
+
+
+
+ t = setTimeout('appeartxt()', 30);
+ }
+}
+
+function hidetxt() {
+ opx=0;
+ document.getElementById('mess2').style.visibility='hidden';
+ document.getElementById('mess3').style.visibility='hidden';
+}
+
+
+function hide_info() {
+ op=0;
+ document.getElementById('mess').style.visibility='hidden';
+ hidetxt();
+}
+
+function appear() { 
+ if(op < 1) {
+ op += 0.05;
+ tipobj.style.opacity = op;
+ tipobj.style.filter = 'alpha(opacity='+op*100+')';
+ t = setTimeout('appear()', 30);
+ }
+}
+
+</script>
+
+
+<br>
+
+<P><TABLE style="border-collapse:collapse;width:100%;"><TBODY>
+<TR>
+ <TD align="center"><IMG class="x" src="http://sabielektro.ru/sabi/certl2007m.jpg" alt="" border="0" onmousemove="tooltiptxt(this,'увеличить');" onmouseout="hidetxt();" onmousedown="tooltip(this,'http://sabielektro.ru/sabi/certl2007.jpg',120,150);"></TD>
+ <TD width="20"><BR></TD>
+ <TD align="center"><IMG class="x" src="http://sabielektro.ru/sabi/certl2008m.jpg" alt="" border="0" onmousemove="tooltiptxt(this,'увеличить');" onmouseout="hidetxt();" onmousedown="tooltip(this,'http://sabielektro.ru/sabi/certl2008.jpg',120,150);"></TD>
+ <TD width="20"><BR></TD>
+ <TD align="center"><IMG class="x" src="http://sabielektro.ru/sabi/certl2009m.jpg" alt="" border="0" onmousemove="tooltiptxt(this,'увеличить');" onmouseout="hidetxt();" onmousedown="tooltip(this,'http://sabielektro.ru/sabi/certl2009.jpg',120,150);"></TD>
+</TR></TBODY></TABLE></P>
+
+<br>

@@ -1,0 +1,212 @@
+<style type="text/css">
+.block1 { 
+visibility:hidden;
+width: 600px;
+background: #cd0; 
+padding: 5px; 
+border: solid 2px black; 
+float: left; 
+position: absolute; 
+top: 40px; 
+left: -70px; 
+z-index: 10;
+}
+
+
+.block2 { 
+visibility:hidden;
+width: 200px;
+background: #fc0; 
+padding: 5px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+z-index: 99;
+}
+
+.block3 { 
+visibility:hidden;
+background: #0c0; 
+padding: 3px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+}
+
+</style>
+
+<script type="text/javascript" src="zoom.js"></script>
+<br>
+<br>
+<div class="block3" id="mess"></div> 
+<div class="block2" id="mess2"></div> 
+
+
+<script type="text/javascript">
+//================================================================================
+var d2 = document;
+var d = document;
+var tipobj, tipobjtxt;
+var op=0;
+var opx=0;
+var x0=0;
+var y0=0;
+var mousex=0;
+var mousey=0;
+var wx=26;
+var wy=26;
+var wx0=200; //размер основной картинки
+var wy0=50;
+var param='';
+var thmb;
+
+document.onmousemove = function(event) {
+ var event = event || window.event;
+ mousex=defPosition(event).x;
+ mousey=defPosition(event).y;
+ imouse();
+}
+
+
+function defPosition(event) {
+    var x = y = 0;
+    if (document.attachEvent != null) { // Internet Explorer & Opera
+        x = window.event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+        y = window.event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+    } else if (!document.attachEvent && document.addEventListener) { // Gecko
+        x = event.clientX + window.scrollX;
+        y = event.clientY + window.scrollY;
+    } else {
+        // Do nothing
+    }
+    return {x:x, y:y};
+}
+
+function showadd(thumb) {
+ thmb=thumb;
+ this.thumb=thumb;
+ thumb.src="addobj.gif";
+ tooltiptxt('добавить в визуальный конфигуратор');
+}
+
+function showadd2() {
+ if (thmb&&(mousex>(x0+wx0-24))&&(mousex<(x0+wx0-24)+wx)&&(mousey>y0)&&(mousey<y0+wy)) {
+	this.thumb=thmb;
+	thumb.src="addobjh.gif";
+ }
+}
+
+function clickadd() {
+		if ((mousex>(x0+wx0-24))&&(mousex<(x0+wx0-24)+wx)&&(mousey>y0)&&(mousey<y0+wy)) 
+			window.location.href="http://sabielektro.ru/index/visualconf/0-21#"+param;
+}
+
+function tooltiptxt(txt) {
+	tipobjtxt=document.getElementById('mess2');
+	tipobjtxt.innerHTML = txt;
+	if (opx==0) {
+		opx = 0.05;	
+		tipobjtxt.style.opacity = opx; 
+		tipobjtxt.style.left=(mousex+20)+"px";
+		tipobjtxt.style.top=(mousey+20)+"px";
+		tipobjtxt.style.visibility="visible";
+	
+		appeartxt();
+	}
+	else {
+		tipobjtxt.style.left=(mousex+10)+"px";
+		tipobjtxt.style.top=(mousey+10)+"px";
+		tipobjtxt.style.visibility="visible";
+	}		
+}
+
+
+function tooltip(thumb,par) {
+	param=par;
+	this.thumb = thumb;
+	var br=this.thumb.getBoundingClientRect();
+	x0=br.left+document.body.scrollLeft;
+	y0=br.top+document.body.scrollTop;
+
+	wx0 = thumb.offsetWidth;
+	wy0 = thumb.offsetHeight; 
+
+//	wx0=br.width;
+	//wy0=br.height;
+
+//	alert(' ');
+	tipobj=d.getElementById('mess');
+	tipobj.innerHTML = "<img src='addobjd.gif' onmousemove='showadd(this);'>"; //txt;
+//	tipobj.innerHTML = txt;
+	if (!op) {
+		op = 0.05;	
+		tipobj.style.opacity = op; 
+		tipobj.style.left=(x0+wx0-24)+"px";
+		tipobj.style.top=y0+"px";
+		tipobj.style.visibility="visible";
+	
+		appear();
+	}
+	else {
+		tipobj.style.left=(x0+wx0-24)+"px";
+		tipobj.style.top=y0+"px";
+		tipobj.style.visibility="visible";
+	}		
+}
+
+function imouse() {
+
+	if (!((mousex>x0)&&(mousex<x0+wx0)&&(mousey>y0)&&(mousey<y0+wy0))) {
+		op=0;
+		d.getElementById('mess').style.visibility='hidden';
+	}
+	
+	if (!((mousex>(x0+wx0-24))&&(mousex<(x0+wx0-24)+wx)&&(mousey>y0)&&(mousey<y0+wy))) {
+		opx=0;
+		d.getElementById('mess2').style.visibility='hidden';
+	}
+	else if (tipobjtxt) {
+		tipobjtxt.style.left=mousex+10+"px";
+		tipobjtxt.style.top=mousey+10+"px";
+	}
+
+}
+
+function hide_info() {
+
+	//alert(mousex+" "+mousey+"  "+x0+" "+y0);
+	
+	if ((mousex>(x0+wx0-27))&&(mousex<(x0+wx0-24)+wx)&&(mousey>y0-3)&&(mousey<y0+3+wy)) return;
+	op=0;
+	d.getElementById('mess').style.visibility='hidden';
+}
+
+function appear() {	
+	if(op < 0.95) {
+		op += 0.05;
+		tipobj.style.opacity = op;
+		tipobj.style.filter = 'alpha(opacity='+op*100+')';
+		t = setTimeout('appear()', 30);
+	}
+}
+
+function appeartxt() {	
+	if(opx < 0.95) {
+		opx += 0.05;
+		tipobjtxt.style.opacity = opx;
+		tipobjtxt.style.filter = 'alpha(opacity='+opx*100+')';
+		t = setTimeout('appeartxt()', 30);
+	}
+}
+
+document.onmouseup=clickadd;
+document.onmousedown=showadd2;
+
+</script>
+
+
+<p align="center">
+<img src="valena6.jpg" border="0" onmousemove="tooltip(this,'parametr');" onmouseout="hide_info();"><BR>
+<img src="valena6.jpg" border="0" onmousemove="tooltip(this,'parametr2');" onmouseout="hide_info();"><BR>
+<a href="valena6.jpg" onclick="this.href='javascript:void(0);';"><img src="valena6.jpg" border="0" onmousemove="new ImageExpander(this, 'valena6.jpg');"></a><BR>
+</p>

@@ -1,0 +1,64 @@
+<style type="text/css">
+.block3 { 
+visibility:hidden;
+background: #0c0; 
+padding: 0px; 
+border: solid 0px black; 
+float: left; 
+position: absolute; 
+}
+
+</style>
+<div class="block3" id="mess"></div> 
+
+
+<script type="text/javascript">
+
+var op=0;
+
+function tooltip(thumb,par,adr) {
+	this.thumb = thumb;
+	var br=this.thumb.getBoundingClientRect();
+	var x0=br.left+document.body.scrollLeft;
+	var y0=br.top+document.body.scrollTop;
+
+	tipobj=document.getElementById('mess');
+	tipobj.innerHTML = "<A href='"+adr+"'><img src='"+par+"' onmouseout='hide_info();'></A>"; //txt;
+
+	if (!op) {
+		op = 0.2;	
+		tipobj.style.opacity = op; 
+		tipobj.style.left=x0-5+"px";
+		tipobj.style.top=y0-1+"px";
+		tipobj.style.visibility="visible";
+	
+		appear();
+	}
+	else {
+		tipobj.style.left=x0-5+"px";
+		tipobj.style.top=y0-1+"px";
+		tipobj.style.visibility="visible";
+	}		
+}
+
+function hide_info() {
+	op=0;
+	document.getElementById('mess').style.visibility='hidden';
+}
+
+function appear() {	
+	if(op < 1) {
+		op += 0.2;
+		tipobj.style.opacity = op;
+		tipobj.style.filter = 'alpha(opacity='+op*100+')';
+		t = setTimeout('appear()', 30);
+	}
+}
+
+</script>
+
+
+
+<p align="center">
+<A href="http://sabi.ucoz.ru/index/serija_galea_life/0-12/"><img src="valena6.jpg" height="62" border="0" onmousemove="tooltip(this,'valena6.jpg','http://sabi.ucoz.ru/index/serija_galea_life/0-12/');"></A><br>
+</p>
